@@ -54,3 +54,37 @@ def get_info_comics(name):
         return False
     
  
+def generate_keyb(keyboard, k, sp):
+    for i in sp['url_comics']['Marvel'][k].keys():
+        keyboard.row(i)
+
+keyboard1 = telebot.types.ReplyKeyboardMarkup(True, True)
+keyboard1.row('Комиксы')
+
+keyboard_comics = telebot.types.ReplyKeyboardMarkup(True, True)
+sp = read_json('C:/Users/zuiko/OneDrive/Desktop/MarvelBot/data_json/comics.json')
+for i in sp['url_comics']['Marvel'].keys():
+    keyboard_comics.row(i)
+
+
+def generate_key(name, col):
+    keyboard_temp = telebot.types.ReplyKeyboardMarkup(True, True)
+    for i in range(0, col):
+        st = f'{name} #{i}'
+        if Comics_in_base(st):
+            keyboard_temp.row(st)
+    return keyboard_temp
+
+
+
+bot = telebot.TeleBot('1417817254:AAGRJdZkQSsNgWZO7Sfp8REFD1aepTPSGJg')
+
+
+@bot.message_handler(commands=['start'])
+def start_message(message):
+    if not Users_in_base(message.chat.id):
+        User_add(message.chat.id)
+    bot.send_message(message.chat.id, 'Привет, в этом боте ты сможешь почитать комиксы Marvel и посмотреть фильмы и сериалы из киновселенной Marvel',
+                     reply_markup=keyboard1)
+    
+ 
