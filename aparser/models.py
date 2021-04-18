@@ -22,6 +22,10 @@ class Comics(models.Model):
         verbose_name='Количество просмотров',
     )
 
+    class Meta:
+        verbose_name = 'Comics'
+        verbose_name_plural = 'Comics'
+
 
 class Users(models.Model):
     user_id = models.TextField(
@@ -35,3 +39,7 @@ class Users(models.Model):
     count_reads = models.PositiveIntegerField(
         verbose_name='Количество прочтений',
     )
+
+    class Meta:
+        verbose_name = 'Users'
+        verbose_name_plural = 'Users'
