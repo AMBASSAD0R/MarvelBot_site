@@ -38,3 +38,19 @@ def User_add(user_id, type_user='user', col_proj=0):
         col_proj=col_proj,
     ).save()
     
+
+def Comics_in_base(name):
+    try:
+        p = Comics.objects.get(name=name)
+        return True
+    except Comics.DoesNotExist:
+        return False
+
+def get_info_comics(name):
+    try:
+        retro = Comics.objects.filter(name=name)
+        return retro.values().get()
+    except Comics.DoesNotExist:
+        return False
+    
+ 
