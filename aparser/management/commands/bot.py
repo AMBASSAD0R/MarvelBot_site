@@ -94,7 +94,9 @@ def comics_video(message):
     if message.text == 'Комиксы':
         bot.send_message(message.chat.id, 'Тут ты сможешь найти множество комиксов Marvel',
                          reply_markup=keyboard_comics)
-
+    elif message.text == 'В начало':
+        bot.send_message(message.chat.id, 'Вы вернулись в начало',
+                         reply_markup=keyboard1)
         
 class Command(BaseCommand):
     help = 'Запуск бота.'
