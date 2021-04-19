@@ -11,3 +11,9 @@ import telebot
 import sqlite3
 from django.core.management.base import BaseCommand
 from aparser.models import Comics
+
+
+
+def generate_headers():
+    ua = UserAgent()
+    return {'user-agent': ua.random}
