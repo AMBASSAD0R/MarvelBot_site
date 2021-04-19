@@ -97,6 +97,45 @@ def comics_video(message):
     elif message.text == 'В начало':
         bot.send_message(message.chat.id, 'Вы вернулись в начало',
                          reply_markup=keyboard1)
+    elif message.text in read_json('C:/Users/zuiko/OneDrive/Desktop/MarvelBot/data_json/comics.json')['url_comics']['Marvel'].keys():
+        keybord_c = telebot.types.ReplyKeyboardMarkup(True, True)
+        generate_keyb(keybord_c, message.text, read_json('C:/Users/zuiko/OneDrive/Desktop/MarvelBot/data_json/comics.json'))
+        keybord_c.row('В начало')
+        bot.send_message(message.chat.id, f'Здесь есть множество комиксов из серии {message.text}',
+                         reply_markup=keybord_c)
+    elif check_v(message.text)[-1] == True:
+        com = message.text + ' #'
+        keybord_c1 = telebot.types.ReplyKeyboardMarkup(True, True)
+        for i in range(1000):
+            if Comics_in_base(com + str(i)):
+                keybord_c1.row(com + str(i))
+        keybord_c1.row('В начало')
+        bot.send_message(message.chat.id, f'Здесь есть множество выпусков из серии {message.text}',
+                         reply_markup=keybord_c1)
+    elif message.text == 'Человек-паук':
+        bot.send_message(message.chat.id, 'Здесь есть множество комиксов про Человека-паука',
+                         reply_markup=keyboard.keybord_pauk)
+    elif message.text == 'Amazing':
+        bot.send_message(message.chat.id, 'Здесь есть множество комиксов из серии Amazing Spider-man, если вы не нашли нужный выпуск попробуйте ввести "Amazing Spider-Man #1" вместо 1 нужный номер (без ковычек)',
+                         reply_markup=keyboard.keyboard_amazing)
+    elif Comics_in_base(message.text):
+        print(get_info_comics(message.text)['cover_id'])
+        c = get_info_comics(message.text)['colpage_pdf']
+        bot.send_photo(message.chat.id, get_info_comics(message.text)['cover_id'], caption=f'{message.text}\nКоличество страниц: {c}')
+        bot.send_document(
+            message.chat.id, get_info_comics(message.text)['file_id'])
+    elif message.text == 'Amazing Spider-Man #1':
+        bot.send_document(
+            message.chat.id, 'BQACAgIAAxkDAAILlmBKXEkZNZMXjpL89VK7e-HitKVHAAJbDQACpElQSlrX9e3ve4LbHgQ')
+    elif message.text == 'test':
+        sp1 = get_path_json(read_json('data_json\comics.json'))
+        for i in sp1:
+            print(i)
+            get_id(message, db_comics, i[0].replace(
+                ':', " -"), i[1].replace(':', " -"))
+    else:
+        print(message.text in read_json('C:/Users/zuiko/OneDrive/Desktop/MarvelBot/data_json/comics.json')['url_comics']['Marvel'].keys())
+        
         
 class Command(BaseCommand):
     help = 'Запуск бота.'
