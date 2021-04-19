@@ -35,7 +35,7 @@ def User_add(user_id, type_user='user', col_proj=0):
     p = Users(
         user_id=user_id,
         type_user=type_user,
-        col_proj=col_proj,
+        count_reads=col_proj,
     ).save()
     
 
