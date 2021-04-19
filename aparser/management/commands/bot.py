@@ -88,3 +88,9 @@ def start_message(message):
                      reply_markup=keyboard1)
     
  
+@bot.message_handler(content_types=['text'])
+def comics_video(message):
+    global db_comics
+    if message.text == 'Комиксы':
+        bot.send_message(message.chat.id, 'Тут ты сможешь найти множество комиксов Marvel',
+                         reply_markup=keyboard_comics)
