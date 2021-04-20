@@ -4,7 +4,7 @@ import datetime
 import time
 import json
 from django.core.management.base import BaseCommand
-from aparser.models import Comics, Users, Films
+from aparser.models import Comics, Users
 import os
 
 
@@ -45,6 +45,9 @@ def Comics_in_base(name):
         return True
     except Comics.DoesNotExist:
         return False
+    
+def Comics_change(name, col_proj):
+    Comics.objects.filter(name=name).update(count_reads=col_proj)
 
 def get_info_comics(name):
     try:
@@ -121,6 +124,7 @@ def comics_video(message):
     elif Comics_in_base(message.text):
         print(get_info_comics(message.text)['cover_id'])
         c = get_info_comics(message.text)['colpage_pdf']
+        Comics_change(name, get_info_comics(message.text)['count_reads'])
         bot.send_photo(message.chat.id, get_info_comics(message.text)['cover_id'], caption=f'{message.text}\nКоличество страниц: {c}')
         bot.send_document(
             message.chat.id, get_info_comics(message.text)['file_id'])
