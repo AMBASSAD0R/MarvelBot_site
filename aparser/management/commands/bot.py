@@ -124,19 +124,13 @@ def comics_video(message):
     elif Comics_in_base(message.text):
         print(get_info_comics(message.text)['cover_id'])
         c = get_info_comics(message.text)['colpage_pdf']
-        Comics_change(name, get_info_comics(message.text)['count_reads'])
+        Comics_change(message.text, get_info_comics(message.text)['count_reads'])
         bot.send_photo(message.chat.id, get_info_comics(message.text)['cover_id'], caption=f'{message.text}\nКоличество страниц: {c}')
         bot.send_document(
             message.chat.id, get_info_comics(message.text)['file_id'])
     elif message.text == 'Amazing Spider-Man #1':
         bot.send_document(
             message.chat.id, 'BQACAgIAAxkDAAILlmBKXEkZNZMXjpL89VK7e-HitKVHAAJbDQACpElQSlrX9e3ve4LbHgQ')
-    elif message.text == 'test':
-        sp1 = get_path_json(read_json('data_json\comics.json'))
-        for i in sp1:
-            print(i)
-            get_id(message, db_comics, i[0].replace(
-                ':', " -"), i[1].replace(':', " -"))
     else:
         print(message.text in read_json('C:/Users/zuiko/OneDrive/Desktop/MarvelBot/data_json/comics.json')['url_comics']['Marvel'].keys())
         
