@@ -308,8 +308,10 @@ class ComicsParser:
                     os.mkdir('C:/Users/zuiko/OneDrive/Desktop/MarvelBot/Comics/' + i + '/' + j.replace(':', " -"))
                 except:
                     pass
-                ComicsParser.run_get_comics_uni(self, 'C:/Users/zuiko/OneDrive/Desktop/MarvelBot/Comics/' + i + '/' + j.replace(
-                    ':', " -") + '/' + j.replace(':', " -") + ' #', json_parse['url_comics']['Marvel'][i][j], [0, 200])
+                ComicsParser.run_get_comics_uni(self,
+                                                'C:/Users/zuiko/OneDrive/Desktop/MarvelBot/Comics/' + i + '/' + j.replace(
+                                                    ':', " -") + '/' + j.replace(':', " -") + ' #',
+                                                json_parse['url_comics']['Marvel'][i][j], [0, 200])
 
     def main(self):
         ComicsParser.parse_json(

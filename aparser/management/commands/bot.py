@@ -16,14 +16,14 @@ def check_v(message1):
                 return [i, True]
     return [False]
 
- 
+
 def read_json(path):
-    with open(path, "r", encoding='utf-8') as read_file:
+    with open(path, 'r', encoding='utf-8') as read_file:
         data = json.load(read_file)
         return data
 
 
- def Users_in_base(user_id):
+def users_in_base(user_id):
     try:
         p = Users.objects.get(user_id=user_id)
         return True
@@ -31,23 +31,25 @@ def read_json(path):
         return False
 
 
-def User_add(user_id, type_user='user', col_proj=0):
+def user_add(user_id, type_user='user', col_proj=0):
     p = Users(
         user_id=user_id,
         type_user=type_user,
         count_reads=col_proj,
     ).save()
-    
 
-def Comics_in_base(name):
+
+def comics_in_base(name):
     try:
         p = Comics.objects.get(name=name)
         return True
     except Comics.DoesNotExist:
         return False
-    
-def Comics_change(name, col_proj):
+
+
+def comics_change(name, col_proj):
     Comics.objects.filter(name=name).update(count_reads=col_proj)
+
 
 def get_info_comics(name):
     try:
@@ -55,11 +57,12 @@ def get_info_comics(name):
         return retro.values().get()
     except Comics.DoesNotExist:
         return False
-    
- 
+
+
 def generate_keyb(keyboard, k, sp):
     for i in sp['url_comics']['Marvel'][k].keys():
         keyboard.row(i)
+
 
 keyboard1 = telebot.types.ReplyKeyboardMarkup(True, True)
 keyboard1.row('Комиксы')
@@ -74,10 +77,9 @@ def generate_key(name, col):
     keyboard_temp = telebot.types.ReplyKeyboardMarkup(True, True)
     for i in range(0, col):
         st = f'{name} #{i}'
-        if Comics_in_base(st):
+        if comics_in_base(st):
             keyboard_temp.row(st)
     return keyboard_temp
-
 
 
 bot = telebot.TeleBot('1417817254:AAGRJdZkQSsNgWZO7Sfp8REFD1aepTPSGJg')
@@ -85,12 +87,14 @@ bot = telebot.TeleBot('1417817254:AAGRJdZkQSsNgWZO7Sfp8REFD1aepTPSGJg')
 
 @bot.message_handler(commands=['start'])
 def start_message(message):
-    if not Users_in_base(message.chat.id):
-        User_add(message.chat.id)
-    bot.send_message(message.chat.id, 'Привет, в этом боте ты сможешь почитать комиксы Marvel и посмотреть фильмы и сериалы из киновселенной Marvel',
+    if not users_in_base(message.chat.id):
+        user_add(message.chat.id)
+    bot.send_message(message.chat.id,
+                     'Привет, в этом боте ты сможешь почитать комиксы Marvel'
+                     ' и посмотреть фильмы и сериалы из киновселенной Marvel',
                      reply_markup=keyboard1)
-    
- 
+
+
 @bot.message_handler(content_types=['text'])
 def comics_video(message):
     global db_comics
@@ -100,9 +104,11 @@ def comics_video(message):
     elif message.text == 'В начало':
         bot.send_message(message.chat.id, 'Вы вернулись в начало',
                          reply_markup=keyboard1)
-    elif message.text in read_json('C:/Users/zuiko/OneDrive/Desktop/MarvelBot/data_json/comics.json')['url_comics']['Marvel'].keys():
+    elif message.text in read_json('C:/Users/zuiko/OneDrive/Desktop/MarvelBot/data_json/comics.json')['url_comics'][
+        'Marvel'].keys():
         keybord_c = telebot.types.ReplyKeyboardMarkup(True, True)
-        generate_keyb(keybord_c, message.text, read_json('C:/Users/zuiko/OneDrive/Desktop/MarvelBot/data_json/comics.json'))
+        generate_keyb(keybord_c, message.text,
+                      read_json('C:/Users/zuiko/OneDrive/Desktop/MarvelBot/data_json/comics.json'))
         keybord_c.row('В начало')
         bot.send_message(message.chat.id, f'Здесь есть множество комиксов из серии {message.text}',
                          reply_markup=keybord_c)
@@ -110,31 +116,28 @@ def comics_video(message):
         com = message.text + ' #'
         keybord_c1 = telebot.types.ReplyKeyboardMarkup(True, True)
         for i in range(1000):
-            if Comics_in_base(com + str(i)):
+            if comics_in_base(com + str(i)):
                 keybord_c1.row(com + str(i))
         keybord_c1.row('В начало')
         bot.send_message(message.chat.id, f'Здесь есть множество выпусков из серии {message.text}',
                          reply_markup=keybord_c1)
-    elif message.text == 'Человек-паук':
-        bot.send_message(message.chat.id, 'Здесь есть множество комиксов про Человека-паука',
-                         reply_markup=keyboard.keybord_pauk)
-    elif message.text == 'Amazing':
-        bot.send_message(message.chat.id, 'Здесь есть множество комиксов из серии Amazing Spider-man, если вы не нашли нужный выпуск попробуйте ввести "Amazing Spider-Man #1" вместо 1 нужный номер (без ковычек)',
-                         reply_markup=keyboard.keyboard_amazing)
-    elif Comics_in_base(message.text):
+    elif comics_in_base(message.text):
         print(get_info_comics(message.text)['cover_id'])
         c = get_info_comics(message.text)['colpage_pdf']
-        Comics_change(message.text, get_info_comics(message.text)['count_reads'])
-        bot.send_photo(message.chat.id, get_info_comics(message.text)['cover_id'], caption=f'{message.text}\nКоличество страниц: {c}')
+        comics_change(message.text, get_info_comics(message.text)['count_reads'])
+        bot.send_photo(message.chat.id, get_info_comics(message.text)['cover_id'],
+                       caption=f'{message.text}\nКоличество страниц: {c}')
         bot.send_document(
             message.chat.id, get_info_comics(message.text)['file_id'])
     elif message.text == 'Amazing Spider-Man #1':
         bot.send_document(
             message.chat.id, 'BQACAgIAAxkDAAILlmBKXEkZNZMXjpL89VK7e-HitKVHAAJbDQACpElQSlrX9e3ve4LbHgQ')
     else:
-        print(message.text in read_json('C:/Users/zuiko/OneDrive/Desktop/MarvelBot/data_json/comics.json')['url_comics']['Marvel'].keys())
-        
-        
+        print(
+            message.text in read_json('C:/Users/zuiko/OneDrive/Desktop/MarvelBot/data_json/comics.json')['url_comics'][
+                'Marvel'].keys())
+
+
 class Command(BaseCommand):
     help = 'Запуск бота.'
 
