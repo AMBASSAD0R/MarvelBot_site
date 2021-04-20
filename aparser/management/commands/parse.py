@@ -179,7 +179,7 @@ class ComicsParser:
                             file_id=sp[1],
                             cover_id=sp[2],
                             colpage_pdf=sp[3],
-                            count_reads=0
+                            count_views=0
                         ).save()
                         print(p)
                 except Exception as e:
@@ -199,7 +199,7 @@ class ComicsParser:
                             file_id=sp[1],
                             cover_id=sp[2],
                             colpage_pdf=sp[3],
-                            col_prosmotrov=0
+                            count_views=0
                         ).save()
                         print(p)
                 except Exception as e:
@@ -215,7 +215,7 @@ class ComicsParser:
                 url1 = url + f'0{x}'
             else:
                 url1 = url + f'{x}'
-            get_comics_uni(path=path1, url=url1, col_null=2, g=0)
+            ComicsParser.get_comics_uni(self)
 
     def get_name_comics(self, url):
         sp1 = []
@@ -263,7 +263,7 @@ class ComicsParser:
                 os.mkdir(i[0].split('/')[-2])
             except:
                 pass
-            run_get_comics_uni(i[0], i[1], [1, 1000])
+            ComicsParser.run_get_comics_uni(self, i[0], i[1], [1, 1000])
 
     def parse_add_json(self, url):
         p = requests.get(url)
